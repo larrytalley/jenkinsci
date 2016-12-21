@@ -60,6 +60,13 @@ EXPOSE 50000
 
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
+RUN curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/batch-install-jenkins-plugins.sh \
+  && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/exclude-plugins \
+  && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/include-plugins 
+  
+RUN chmod +x batch-install-jenkins-plugins.sh
+  && ./batch-install-jenkins-plugins.sh --plugins include-plugins --excludedplugins exclude-plugins --plugindir $JENKINS_HOME/plugins
+
 USER ${user}
 
 COPY jenkins-support /usr/local/bin/jenkins-support
