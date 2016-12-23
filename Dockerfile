@@ -23,8 +23,8 @@ VOLUME /var/jenkins_home
 # `/usr/share/jenkins/ref/` contains all reference configuration we want 
 # to set on a fresh new installation. Use it to bundle additional plugins 
 # or config file with your custom jenkins Docker image.
-RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d 
-RUN curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/init.groovy 
+RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d \
+    && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/init.groovy 
 COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy
 
 ENV TINI_VERSION 0.13.1
@@ -62,10 +62,10 @@ ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
 RUN curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/batch-install-jenkins-plugins.sh \
   && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/exclude-plugins \
-  && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/include-plugins 
+  && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/include-plugins \
+  && chmod +x batch-install-jenkins-plugins.sh
   
-RUN chmod +x batch-install-jenkins-plugins.sh
-  && ./batch-install-jenkins-plugins.sh --plugins include-plugins --excludedplugins exclude-plugins --plugindir $JENKINS_HOME/plugins
+RUN ./batch-install-jenkins-plugins.sh --plugins include-plugins --excludedplugins exclude-plugins --plugindir $JENKINS_HOME/plugins
 
 USER ${user}
 
