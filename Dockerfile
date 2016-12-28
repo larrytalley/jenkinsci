@@ -62,19 +62,23 @@ EXPOSE 8080
 # will be used by attached slave agents:
 EXPOSE 50000
 
+COPY jenkins-support /usr/local/bin/jenkins-support
+COPY jenkins.sh /usr/local/bin/jenkins.sh
+
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
 RUN curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/batch-install-jenkins-plugins.sh -o batch-install-jenkins-plugins.sh \
   && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/exclude-plugins -o exclude-plugins \
   && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/include-plugins -o include-plugins \
-  && chmod +x batch-install-jenkins-plugins.sh
+  && chmod +x batch-install-jenkins-plugins.sh \
+  && chmod +x /usr/local/bin/jenkins-support \
+  && chmod +x /usr/local/bin/jenkins.sh
   
 RUN mkdir -p $JENKINS_HOME/plugins \
   && ./batch-install-jenkins-plugins.sh --plugins include-plugins --xplugins exclude-plugins --plugindir $JENKINS_HOME/plugins
-  
-COPY jenkins-support /usr/local/bin/jenkins-support
-COPY jenkins.sh /usr/local/bin/jenkins.sh
-RUN chown -R ${user} "$JENKINS_HOME" /usr/share/jenkins
+
+RUN chown -R ${user} "$JENKINS_HOME" /usr/share/jenkins \
+  && chown -R ${user} /usr/local/bin/jenkins.sh /usr/local/bin/jenkins-support /bin/tini 
 
 USER ${user}
 
