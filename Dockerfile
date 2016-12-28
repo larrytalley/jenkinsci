@@ -27,8 +27,6 @@ RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d \
     && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/init.groovy -o init.groovy \
     && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/jenkins.sh -o jenkins.sh \
     && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/jenkins-support -o jenkins-support \
-    && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/plugins.sh -o plugins.sh \
-    && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/install-plugins.sh -o install-plugins.sh
 COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy 
 
 ENV TINI_VERSION 0.13.1
@@ -77,7 +75,3 @@ USER ${user}
 COPY jenkins-support /usr/local/bin/jenkins-support
 COPY jenkins.sh /usr/local/bin/jenkins.sh
 ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
-
-# from a derived Dockerfile, can use `RUN plugins.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
-COPY plugins.sh /usr/local/bin/plugins.sh
-COPY install-plugins.sh /usr/local/bin/install-plugins.sh
