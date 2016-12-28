@@ -67,7 +67,8 @@ RUN curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/batch-in
   && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/include-plugins -o include-plugins \
   && chmod +x batch-install-jenkins-plugins.sh
   
-RUN ./batch-install-jenkins-plugins.sh --plugins include-plugins --xplugins exclude-plugins --plugindir $JENKINS_HOME/plugins
+RUN mkdir -p $JENKINS_HOME/plugins \
+  && ./batch-install-jenkins-plugins.sh --plugins include-plugins --xplugins exclude-plugins --plugindir $JENKINS_HOME/plugins
 
 USER ${user}
 
