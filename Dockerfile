@@ -26,7 +26,10 @@ VOLUME /var/jenkins_home
 RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d \
     && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/init.groovy -o init.groovy \
     && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/jenkins.sh -o jenkins.sh \
-    && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/jenkins-support -o jenkins-support 
+    && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/jenkins-support -o jenkins-support \
+    && chmod +x init.groovy \
+    && chmod +x jenkins.sh \
+    && chmod +x jenins-support
 COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy 
 
 ENV TINI_VERSION 0.13.1
