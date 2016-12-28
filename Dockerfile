@@ -55,7 +55,6 @@ RUN curl --progress-bar -fsSL ${JENKINS_URL} -o /usr/share/jenkins/jenkins.war \
   && echo "${JENKINS_SHA}  /usr/share/jenkins/jenkins.war" | sha1sum -c -
 
 ENV JENKINS_UC https://updates.jenkins.io
-RUN chown -R ${user} "$JENKINS_HOME" /usr/share/jenkins/ref
 
 # for main web interface:
 EXPOSE 8080
@@ -72,9 +71,11 @@ RUN curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/
   
 RUN mkdir -p $JENKINS_HOME/plugins \
   && ./batch-install-jenkins-plugins.sh --plugins include-plugins --xplugins exclude-plugins --plugindir $JENKINS_HOME/plugins
+  
+COPY jenkins-support /usr/local/bin/jenkins-support
+COPY jenkins.sh /usr/local/bin/jenkins.sh
+RUN chown -R ${user} "$JENKINS_HOME" /usr/share/jenkins
 
 USER ${user}
 
-COPY jenkins-support /usr/local/bin/jenkins-support
-COPY jenkins.sh /usr/local/bin/jenkins.sh
 ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
