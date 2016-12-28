@@ -24,8 +24,10 @@ VOLUME /var/jenkins_home
 # to set on a fresh new installation. Use it to bundle additional plugins 
 # or config file with your custom jenkins Docker image.
 RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d \
-    && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/init.groovy 
-COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy
+    && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/init.groovy -o init.groovy \
+    && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/jenkins.sh -o jenkins.sh \
+    && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/jenkins-support -o jenkins-support
+COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy 
 
 ENV TINI_VERSION 0.13.1
 ENV TINI_SHA 0f78709a0e3c80e7c9119fdc32c2bc0f4cfc4cab
