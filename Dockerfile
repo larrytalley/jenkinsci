@@ -24,19 +24,19 @@ VOLUME /var/jenkins_home
 # to set on a fresh new installation. Use it to bundle additional plugins 
 # or config file with your custom jenkins Docker image.
 RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d \
-    && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/init.groovy -o init.groovy \
-    && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/jenkins.sh -o jenkins.sh \
-    && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/jenkins-support -o jenkins-support \
+    && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/init.groovy -o init.groovy \
+    && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/jenkins.sh -o jenkins.sh \
+    && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/jenkins-support -o jenkins-support \
     && chmod +x init.groovy \
     && chmod +x jenkins.sh \
-    && chmod +x jenins-support
+    && chmod +x jenkins-support
 COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy 
 
 ENV TINI_VERSION 0.13.1
 ENV TINI_SHA 0f78709a0e3c80e7c9119fdc32c2bc0f4cfc4cab
 
 # Use tini as subreaper in Docker container to adopt zombie processes 
-RUN curl -fsSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static-amd64 -o /bin/tini && chmod +x /bin/tini \
+RUN curl --progress-bar -fsSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static-amd64 -o /bin/tini && chmod +x /bin/tini \
   && echo "$TINI_SHA  /bin/tini" | sha1sum -c -
 
 # jenkins version being bundled in this docker image
@@ -51,7 +51,7 @@ ARG JENKINS_URL=https://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-w
 
 # could use ADD but this one does not check Last-Modified header neither does it allow to control checksum 
 # see https://github.com/docker/docker/issues/8331
-RUN curl -fsSL ${JENKINS_URL} -o /usr/share/jenkins/jenkins.war \
+RUN curl --progress-bar -fsSL ${JENKINS_URL} -o /usr/share/jenkins/jenkins.war \
   && echo "${JENKINS_SHA}  /usr/share/jenkins/jenkins.war" | sha1sum -c -
 
 ENV JENKINS_UC https://updates.jenkins.io
@@ -65,9 +65,9 @@ EXPOSE 50000
 
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
-RUN curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/batch-install-jenkins-plugins.sh -o batch-install-jenkins-plugins.sh \
-  && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/exclude-plugins -o exclude-plugins \
-  && curl https://raw.githubusercontent.com/larrytalley/jenkinsci/master/include-plugins -o include-plugins \
+RUN curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/batch-install-jenkins-plugins.sh -o batch-install-jenkins-plugins.sh \
+  && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/exclude-plugins -o exclude-plugins \
+  && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/include-plugins -o include-plugins \
   && chmod +x batch-install-jenkins-plugins.sh
   
 RUN mkdir -p $JENKINS_HOME/plugins \
