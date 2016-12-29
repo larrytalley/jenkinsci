@@ -77,8 +77,10 @@ RUN curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/
 RUN mkdir -p $JENKINS_HOME/plugins \
   && ./batch-install-jenkins-plugins.sh --plugins include-plugins --xplugins exclude-plugins --plugindir $JENKINS_HOME/plugins
 
-RUN chown -R ${user} "$JENKINS_HOME" /usr/share/jenkins \
-  && chown -R ${user} /usr/local/bin/jenkins.sh /usr/local/bin/jenkins-support /bin/tini 
+RUN chown -R ${user}:${group} "$JENKINS_HOME" \
+  && chown -R ${user}:${group} /usr/share/ \
+  && chown -R ${user}:${group} /bin/ \
+  && chown -R ${user}:${group} /usr/local/bin/ 
 
 USER ${user}
 
