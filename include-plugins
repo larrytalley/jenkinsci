@@ -1,1 +1,20 @@
-Green Balls
+analysis-core
+audit-trail
+build-flow-plugin
+buildgraph-view
+build-metrics
+build-timeout
+changelog-history
+claim
+config-file-provider
+configurationslicing
+console-column-plugin
+dashboard-view
+greenballs
+htmlpublisher
+mercurial
+sonar
+ssh-agent
+thucydides
+timestamper
+viewVC
