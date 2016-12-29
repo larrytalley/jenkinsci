@@ -12,6 +12,10 @@ console-column-plugin
 dashboard-view
 greenballs
 htmlpublisher
+javadoc
+junit
+mailer
+maven-plugin
 mercurial
 sonar
 ssh-agent
