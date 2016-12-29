@@ -100,7 +100,7 @@ usage() {
   Examples:
 
      Run:
-     $PROGNAME --plugins okplugins --excludedplugins nokplugins --plugindir /var/lib/myjenkins/plugins
+     $PROGNAME --plugins okplugins --xplugins nokplugins --plugindir /var/lib/myjenkins/plugins
 EOF
 
   exit 1
