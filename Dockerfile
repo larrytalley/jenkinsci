@@ -24,19 +24,22 @@ VOLUME /var/jenkins_home
 # to set on a fresh new installation. Use it to bundle additional plugins 
 # or config file with your custom jenkins Docker image.
 RUN mkdir -p /usr/share/jenkins/ref/init.groovy.d \
-    && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/init.groovy -o init.groovy \
-    && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/jenkins.sh -o jenkins.sh \
-    && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/jenkins-support -o jenkins-support \
+    && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/init.groovy -O \
+    && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/jenkins.sh -O \
+    && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/jenkins-support -O \
     && chmod +x init.groovy \
     && chmod +x jenkins.sh \
     && chmod +x jenkins-support
 COPY init.groovy /usr/share/jenkins/ref/init.groovy.d/tcp-slave-agent-port.groovy 
+COPY jenkins-support /usr/local/bin/jenkins-support
+COPY jenkins.sh /usr/local/bin/jenkins.sh
 
 ENV TINI_VERSION 0.13.1
 ENV TINI_SHA 0f78709a0e3c80e7c9119fdc32c2bc0f4cfc4cab
 
 # Use tini as subreaper in Docker container to adopt zombie processes 
-RUN curl --progress-bar -fsSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static-amd64 -o /bin/tini && chmod +x /bin/tini \
+RUN curl --progress-bar -fsSL https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-static-amd64 -o /bin/tini \
+  && chmod +x /bin/tini \
   && echo "$TINI_SHA  /bin/tini" | sha1sum -c -
 
 # jenkins version being bundled in this docker image
@@ -62,14 +65,11 @@ EXPOSE 8080
 # will be used by attached slave agents:
 EXPOSE 50000
 
-COPY jenkins-support /usr/local/bin/jenkins-support
-COPY jenkins.sh /usr/local/bin/jenkins.sh
-
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
-RUN curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/batch-install-jenkins-plugins.sh -o batch-install-jenkins-plugins.sh \
-  && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/exclude-plugins -o exclude-plugins \
-  && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/include-plugins -o include-plugins \
+RUN curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/batch-install-jenkins-plugins.sh -O \
+  && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/exclude-plugins -O \
+  && curl --progress-bar https://raw.githubusercontent.com/larrytalley/jenkinsci/master/include-plugins -O \
   && chmod +x batch-install-jenkins-plugins.sh \
   && chmod +x /usr/local/bin/jenkins-support \
   && chmod +x /usr/local/bin/jenkins.sh
