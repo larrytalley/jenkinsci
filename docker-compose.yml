@@ -1,0 +1,10 @@
+jenkinsci:
+  image: 'larrytalley/jenkinsci:latest'
+restart: always
+hostname: 'jenkinsci.localhost'
+environment:
+  -SAMPLE_ENV_VARIABLE: bob
+ports:
+  -'8888:8080' - '50000:50000'
+volumes:
+  -'/var/jenkins_home:/var/jenkins_home'
